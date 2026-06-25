@@ -16,7 +16,7 @@ export const MovieModal = ({ movie, isOpen, onClose, isFavorite, isInWatchlist, 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
             <div
-                className="bg-slate-900 border border-white/10 rounded-3xl overflow-hidden max-w-4xl w-full flex flex-col md:flex-row shadow-2xl relative"
+                className="bg-slate-900 border border-white/10 rounded-3xl overflow-hidden max-w-4xl w-full flex flex-col md:flex-row shadow-2xl relative max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
             >
                 <button
@@ -34,8 +34,8 @@ export const MovieModal = ({ movie, isOpen, onClose, isFavorite, isInWatchlist, 
                     />
                 </div>
 
-                <div className="p-8 flex flex-col justify-center text-slate-50 md:w-1/2">
-                    <h2 className="text-4xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">
+                <div className="p-5 sm:p-8 md:p-8 flex flex-col justify-center text-slate-50 md:w-1/2">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">
                         {movie.title}
                     </h2>
 
@@ -53,13 +53,13 @@ export const MovieModal = ({ movie, isOpen, onClose, isFavorite, isInWatchlist, 
                         {movie.description}
                     </p>
 
-                    <div className="flex flex-wrap gap-4 mt-8">
+                    <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 mt-6 sm:mt-8">
                         <button
                             onClick={(e) => {
                                 e.stopPropagation();
                                 onToggleWatchlist?.();
                             }}
-                            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${isInWatchlist
+                            className={`flex items-center w-full justify-center sm:w-auto gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${isInWatchlist
                                 ? 'bg-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.4)]'
                                 : 'bg-white/10 text-white hover:bg-white/20'
                                 }`}
@@ -75,7 +75,7 @@ export const MovieModal = ({ movie, isOpen, onClose, isFavorite, isInWatchlist, 
                                 e.stopPropagation();
                                 onToggleFavorite?.();
                             }}
-                            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${isFavorite
+                            className={`flex items-center w-full justify-center sm:w-auto gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${isFavorite
                                 ? 'bg-red-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.4)]'
                                 : 'bg-white/10 text-white hover:bg-white/20'
                                 }`}

@@ -17,8 +17,8 @@ export default function FavoritesPage({ favorites, watchlist, toggleFavorite, to
     const favoriteMovies = moviesData.filter(movie => favorites.has(movie.id));
 
     return (
-        <div className="p-8 md:p-16">
-            <header className="mb-12 text-center max-w-5xl mx-auto">
+        <div className="p-4 sm:p-8 md:p-16">
+            <header className="mb-8 sm:mb-10 md:mb-12 text-center max-w-5xl mx-auto">
             </header>
 
             {favoriteMovies.length === 0 ? (
@@ -26,7 +26,7 @@ export default function FavoritesPage({ favorites, watchlist, toggleFavorite, to
                     <p className="text-2xl text-slate-400">Nothing to see here!</p>
                 </div>
             ) : (
-                <main className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-8 max-w-7xl mx-auto">
+                <main className="grid grid-cols-1 min-[375px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
                     {favoriteMovies.map(movie => (
                         <MovieCard
                             key={movie.id}

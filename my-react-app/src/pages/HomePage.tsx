@@ -33,8 +33,8 @@ export default function HomePage({ favorites, watchlist, toggleFavorite, toggleW
     });
 
     return (
-        <div className="p-8 md:p-16">
-            <header className="mb-12 text-center max-w-5xl mx-auto">
+        <div className="p-4 sm:p-8 md:p-16">
+            <header className="mb-8 sm:mb-10 md:mb-12 text-center max-w-5xl mx-auto">
                 <div className="flex flex-col md:flex-row gap-4 items-center justify-center">
                     <div className="flex-1 w-full md:max-w-2xl">
                         <SearchBar value={searchTerm} onChange={setSearchTerm} />
@@ -44,7 +44,7 @@ export default function HomePage({ favorites, watchlist, toggleFavorite, toggleW
                     </div>
                 </div>
             </header>
-            <main className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-8 max-w-7xl mx-auto">
+            <main className="grid grid-cols-1 min-[375px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
                 {filteredMovies.map(movie => (
                     <MovieCard
                         key={movie.id}

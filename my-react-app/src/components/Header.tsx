@@ -11,11 +11,11 @@ export const Header = ({ favoritesCount, watchlistCount }: HeaderProps) => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     <div className="flex-shrink-0">
-                        <NavLink to="/" className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">
+                        <NavLink to="/" className="text-xl sm:text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">
                             Movie Explorer
                         </NavLink>
                     </div>
-                    <nav className="flex space-x-8">
+                    <nav className="flex space-x-4 sm:space-x-8">
                         <NavLink 
                             to="/" 
                             className={({ isActive }) => 

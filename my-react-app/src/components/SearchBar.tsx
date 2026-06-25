@@ -5,14 +5,14 @@ interface SearchBarProps {
 
 export const SearchBar = ({ value, onChange }: SearchBarProps) => {
     return (
-        <div className="w-full max-w-2xl mx-auto mb-10">
+        <div className="w-full max-w-2xl mx-auto">
             <div className="relative">
                 <input
                     type="text"
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                     placeholder="Search movies..."
-                    className="w-full bg-white/5 border border-white/10 text-white placeholder-slate-400 rounded-full px-6 py-4 text-lg backdrop-blur-md outline-none transition-all duration-300 focus:bg-white/10 focus:border-sky-400/50 focus:shadow-[0_0_20px_rgba(56,189,248,0.2)]"
+                    className="w-full bg-white/5 border border-white/10 text-white placeholder-slate-400 rounded-full px-4 py-3 text-base sm:px-6 sm:py-4 sm:text-lg backdrop-blur-md outline-none transition-all duration-300 focus:bg-white/10 focus:border-sky-400/50 focus:shadow-[0_0_20px_rgba(56,189,248,0.2)]"
                 />
                 <svg
                     className="absolute right-6 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-400 pointer-events-none"

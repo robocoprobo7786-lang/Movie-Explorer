@@ -6,11 +6,11 @@ interface GenreFilterProps {
 
 export const GenreFilter = ({ genres, selectedGenre, onChange }: GenreFilterProps) => {
     return (
-        <div className="w-full relative mb-10">
+        <div className="w-full relative">
             <select
                 value={selectedGenre}
                 onChange={(e) => onChange(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 text-white rounded-full px-6 py-4 text-lg backdrop-blur-md outline-none transition-all duration-300 focus-visible:bg-white/10  focus-visible:border-sky-400/50  focus-visible:shadow-[0_0_20px_rgba(56,189,248,0.2)] appearance-none cursor-pointer">
+                className="w-full bg-white/5 border border-white/10 text-white rounded-full px-4 py-3 text-base sm:px-6 sm:py-4 sm:text-lg backdrop-blur-md outline-none transition-all duration-300 focus-visible:bg-white/10  focus-visible:border-sky-400/50  focus-visible:shadow-[0_0_20px_rgba(56,189,248,0.2)] appearance-none cursor-pointer">
                 <option value="" className="bg-slate-800 text-white">All Genres</option>
                 {genres.map(genre => (
                     <option key={genre} value={genre} className="bg-slate-800 text-white">
