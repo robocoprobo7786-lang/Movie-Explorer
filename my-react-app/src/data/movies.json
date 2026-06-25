@@ -1,0 +1,191 @@
+[
+  {
+    "id": 1,
+    "title": "Inception",
+    "genre": [
+      "Sci-Fi",
+      "Action"
+    ],
+    "year": 2010,
+    "rating": 8.8,
+    "poster": "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
+    "description": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O."
+  },
+  {
+    "id": 2,
+    "title": "The Godfather",
+    "genre": [
+      "Crime",
+      "Drama"
+    ],
+    "year": 1972,
+    "rating": 9.2,
+    "poster": "https://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+    "description": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son."
+  },
+  {
+    "id": 3,
+    "title": "Spirited Away",
+    "genre": [
+      "Animation",
+      "Family",
+      "Fantasy"
+    ],
+    "year": 2001,
+    "rating": 8.6,
+    "poster": "https://www.themoviedb.org/t/p/w1280/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg",
+    "description": "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits, and where humans are changed into beasts."
+  },
+  {
+    "id": 4,
+    "title": "Parasite",
+    "genre": [
+      "Thriller",
+      "Drama",
+      "Comedy"
+    ],
+    "year": 2019,
+    "rating": 8.5,
+    "poster": "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
+    "description": "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan."
+  },
+  {
+    "id": 5,
+    "title": "The Dark Knight",
+    "genre": [
+      "Action",
+      "Crime",
+      "Drama"
+    ],
+    "year": 2008,
+    "rating": 9.0,
+    "poster": "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+    "description": "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice."
+  },
+  {
+    "id": 6,
+    "title": "Interstellar",
+    "genre": [
+      "Adventure",
+      "Drama",
+      "Sci-Fi"
+    ],
+    "year": 2014,
+    "rating": 8.7,
+    "poster": "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
+    "description": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival."
+  },
+  {
+    "id": 7,
+    "title": "Forrest Gump",
+    "genre": [
+      "Drama",
+      "Romance"
+    ],
+    "year": 1994,
+    "rating": 8.8,
+    "poster": "https://image.tmdb.org/t/p/w500/saHP97rTPS5eLmrLQEcANmKrsFl.jpg",
+    "description": "The presidencies of Kennedy and Johnson, the events of Vietnam, Watergate, and other history unfold through the perspective of an Alabama man with an IQ of 75."
+  },
+  {
+    "id": 8,
+    "title": "The Matrix",
+    "genre": [
+      "Action",
+      "Sci-Fi"
+    ],
+    "year": 1999,
+    "rating": 8.7,
+    "poster": "https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+    "description": "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers."
+  },
+  {
+    "id": 9,
+    "title": "Get Out",
+    "genre": [
+      "Horror",
+      "Mystery",
+      "Thriller"
+    ],
+    "year": 2017,
+    "rating": 7.7,
+    "poster": "https://www.themoviedb.org/t/p/w1280/mE24wUCfjK8AoBBjaMjho7Rczr7.jpg",
+    "description": "A young African-American visits his white girlfriend's parents for the weekend, where his simmering uneasiness about their reception of him eventually reaches a boiling point."
+  },
+  {
+    "id": 10,
+    "title": "La La Land",
+    "genre": [
+      "Comedy",
+      "Drama",
+      "Music"
+    ],
+    "year": 2016,
+    "rating": 8.0,
+    "poster": "https://www.themoviedb.org/t/p/w1280/uDO8zWDhfWwoFdKS4fzkUJt0Rf0.jpg",
+    "description": "While navigating their careers in Los Angeles, a pianist and an actress fall in love while attempting to reconcile their aspirations for the future."
+  },
+  {
+    "id": 11,
+    "title": "Mad Max: Fury Road",
+    "genre": [
+      "Action",
+      "Adventure",
+      "Sci-Fi"
+    ],
+    "year": 2015,
+    "rating": 8.1,
+    "poster": "https://www.themoviedb.org/t/p/w1280/hA2ple9q4qnwxp3hKVNhroipsir.jpg",
+    "description": "In a post-apocalyptic wasteland, a woman rebels against a tyrannical ruler in search for her homeland with the aid of a group of female prisoners, a psychotic worshiper, and a drifter named Max."
+  },
+  {
+    "id": 12,
+    "title": "Amélie",
+    "genre": [
+      "Comedy",
+      "Romance"
+    ],
+    "year": 2001,
+    "rating": 8.3,
+    "poster": "https://www.themoviedb.org/t/p/w1280/nSxDa3M9aMvGVLoItzWTepQ5h5d.jpg",
+    "description": "Amélie is an innocent and naive girl in Paris with her own sense of justice. She decides to help those around her and, along the way, discovers love."
+  },
+  {
+    "id": 13,
+    "title": "Jurassic Park",
+    "genre": [
+      "Adventure",
+      "Sci-Fi",
+      "Thriller"
+    ],
+    "year": 1993,
+    "rating": 8.2,
+    "poster": "https://www.themoviedb.org/t/p/w1280/fjTU1Bgh3KJu4aatZil3sofR2zC.jpg",
+    "description": "A pragmatic paleontologist touring an almost complete theme park on an island in Central America is tasked with protecting a couple of kids after a power failure causes the park's cloned dinosaurs to run loose."
+  },
+  {
+    "id": 14,
+    "title": "The Shining",
+    "genre": [
+      "Horror",
+      "Thriller"
+    ],
+    "year": 1980,
+    "rating": 8.4,
+    "poster": "https://www.themoviedb.org/t/p/w1280/uAR0AWqhQL1hQa69UDEbb2rE5Wx.jpg",
+    "description": "A family heads to an isolated hotel for the winter where a sinister presence influences the father into violence, while his psychic son sees horrific forebodings from both past and future."
+  },
+  {
+    "id": 15,
+    "title": "Spider-Man: Into the Spider-Verse",
+    "genre": [
+      "Animation",
+      "Action",
+      "Adventure"
+    ],
+    "year": 2018,
+    "rating": 8.4,
+    "poster": "https://image.tmdb.org/t/p/w500/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg",
+    "description": "Teen Miles Morales becomes the Spider-Man of his universe, and must join with five spider-powered individuals from other dimensions to stop a threat for all realities."
+  }
+]
