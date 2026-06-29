@@ -11,10 +11,10 @@ export const MobileNav = ({ favoritesCount, watchlistCount }: MobileNavProps) =>
     const [isOpen, setIsOpen] = useState(false);
     const { isAuthenticated, logout } = useAuth();
     const navigate = useNavigate();
-    
+
     const drawerRef = useRef<HTMLDivElement>(null);
     const hamburgerRef = useRef<HTMLButtonElement>(null);
-    const firstFocusableRef = useRef<HTMLAnchorElement>(null);
+    const closeButtonRef = useRef<HTMLButtonElement>(null);
     const previousFocusRef = useRef<HTMLElement | null>(null);
 
     const toggleOpen = () => setIsOpen(prev => !prev);
@@ -26,153 +26,143 @@ export const MobileNav = ({ favoritesCount, watchlistCount }: MobileNavProps) =>
         navigate('/login');
     };
 
-    // Body scroll locking when open
+    // Lock body scroll while drawer is open
     useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-        return () => {
-            document.body.style.overflow = '';
-        };
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+        return () => { document.body.style.overflow = ''; };
     }, [isOpen]);
 
-    // Prevent scroll lock bug if window is resized to desktop width
+    // Close drawer when window resizes to desktop width
     useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth >= 768 && isOpen) {
-                setIsOpen(false);
+        const onResize = () => { if (window.innerWidth >= 768) handleClose(); };
+        window.addEventListener('resize', onResize);
+        return () => window.removeEventListener('resize', onResize);
+    }, []);
+
+    // Escape key, focus trap, focus restore
+    useEffect(() => {
+        if (!isOpen) {
+            previousFocusRef.current?.focus();
+            previousFocusRef.current = null;
+            return;
+        }
+
+        previousFocusRef.current = document.activeElement as HTMLElement;
+
+        const timer = setTimeout(() => closeButtonRef.current?.focus(), 50);
+
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') { handleClose(); return; }
+            if (e.key !== 'Tab' || !drawerRef.current) return;
+
+            const focusable = Array.from(
+                drawerRef.current.querySelectorAll<HTMLElement>(
+                    'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+                )
+            );
+            if (focusable.length === 0) return;
+
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault(); last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault(); first.focus();
             }
         };
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, [isOpen]);
 
-    // Accessibility: ESC listener, focus traps, focus restore
-    useEffect(() => {
-        if (isOpen) {
-            // Save currently active element to restore on close
-            previousFocusRef.current = document.activeElement as HTMLElement;
-            
-            // Wait for transition/render to focus the first interactive item (close button)
-            const focusTimer = setTimeout(() => {
-                firstFocusableRef.current?.focus();
-            }, 150);
-
-            const handleKeyDown = (e: KeyboardEvent) => {
-                if (e.key === 'Escape') {
-                    handleClose();
-                }
-
-                if (e.key === 'Tab') {
-                    if (!drawerRef.current) return;
-                    const focusableElements = drawerRef.current.querySelectorAll<HTMLElement>(
-                        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
-                    );
-                    if (focusableElements.length === 0) return;
-
-                    const firstElement = focusableElements[0];
-                    const lastElement = focusableElements[focusableElements.length - 1];
-
-                    if (e.shiftKey) {
-                        // Shift + Tab (backward tab)
-                        if (document.activeElement === firstElement) {
-                            lastElement.focus();
-                            e.preventDefault();
-                        }
-                    } else {
-                        // Tab (forward tab)
-                        if (document.activeElement === lastElement) {
-                            firstElement.focus();
-                            e.preventDefault();
-                        }
-                    }
-                }
-            };
-
-            window.addEventListener('keydown', handleKeyDown);
-            return () => {
-                window.removeEventListener('keydown', handleKeyDown);
-                clearTimeout(focusTimer);
-            };
-        } else {
-            // Restore focus when closing
-            if (previousFocusRef.current) {
-                previousFocusRef.current.focus();
-                previousFocusRef.current = null;
-            }
-        }
+        window.addEventListener('keydown', onKeyDown);
+        return () => { window.removeEventListener('keydown', onKeyDown); clearTimeout(timer); };
     }, [isOpen]);
 
     return (
-        <div className="relative">
-            {/* Hamburger Button */}
+        <>
+            {/* Hamburger button — always visible on mobile */}
             <button
                 ref={hamburgerRef}
                 onClick={toggleOpen}
-                className="relative w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white cursor-pointer hover:bg-white/10 hover:border-white/20 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 z-50"
-                aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+                aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
                 aria-expanded={isOpen}
+                aria-controls="mobile-drawer"
+                className="relative w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-white/20 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
             >
-                <div className="relative w-5 h-4 flex flex-col justify-between items-center">
-                    <span className={`block w-5 h-0.5 bg-slate-100 rounded transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-1.5' : ''}`} />
-                    <span className={`block w-5 h-0.5 bg-slate-100 rounded transition-all duration-300 ${isOpen ? 'opacity-0 scale-x-0' : 'opacity-100'}`} />
-                    <span className={`block w-5 h-0.5 bg-slate-100 rounded transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+                <span className="sr-only">{isOpen ? 'Close menu' : 'Open menu'}</span>
+                <div className="w-5 flex flex-col gap-[5px]">
+                    <span className={`block h-0.5 w-5 bg-slate-100 rounded transition-all duration-300 origin-center ${isOpen ? 'rotate-45 translate-y-[7px]' : ''}`} />
+                    <span className={`block h-0.5 w-5 bg-slate-100 rounded transition-all duration-300 ${isOpen ? 'opacity-0 scale-x-0' : ''}`} />
+                    <span className={`block h-0.5 w-5 bg-slate-100 rounded transition-all duration-300 origin-center ${isOpen ? '-rotate-45 -translate-y-[7px]' : ''}`} />
                 </div>
             </button>
 
-            {/* Drawer Overlay (Backdrop) */}
+            {/* Backdrop — sits below drawer, above page content */}
             <div
                 onClick={handleClose}
-                className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-30 transition-opacity duration-300 ${
+                aria-hidden="true"
+                className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 ${
                     isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
                 }`}
-                aria-hidden="true"
             />
 
-            {/* Vertical Navigation Drawer Container */}
+            {/* Drawer — full height, slides in from right, sits above backdrop */}
             <div
+                id="mobile-drawer"
                 ref={drawerRef}
-                className={`fixed top-0 right-0 h-full w-72 max-w-[85vw] bg-slate-900 border-l border-white/10 z-40 p-6 pt-24 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out transform ${
-                    isOpen ? 'translate-x-0' : 'translate-x-full'
-                }`}
                 role="dialog"
                 aria-modal="true"
-                aria-label="Navigation drawer"
+                aria-label="Navigation menu"
                 aria-hidden={!isOpen}
+                className={`fixed top-0 right-0 h-screen w-72 max-w-[85vw] bg-slate-900 border-l border-white/10 z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${
+                    isOpen ? 'translate-x-0' : 'translate-x-full'
+                }`}
             >
-                {/* Navigation Links */}
-                <nav className="flex flex-col space-y-3">
+                {/* Drawer header — matches the app header height (h-16) */}
+                <div className="flex items-center justify-between h-16 px-6 border-b border-white/10 shrink-0">
+                    <span className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">
+                        Movie Explorer
+                    </span>
+                    <button
+                        ref={closeButtonRef}
+                        onClick={handleClose}
+                        aria-label="Close navigation menu"
+                        className="w-9 h-9 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                    >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                {/* Nav links */}
+                <nav className="flex flex-col gap-1 p-4 flex-1 overflow-y-auto">
                     <NavLink
-                        ref={firstFocusableRef}
                         to="/"
                         onClick={handleClose}
                         className={({ isActive }) =>
-                            `flex items-center px-4 py-3 rounded-xl text-base font-medium transition-all ${
-                                isActive 
-                                    ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20' 
+                            `flex items-center px-4 py-3 rounded-xl text-base font-medium transition-all duration-200 ${
+                                isActive
+                                    ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20'
                                     : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent'
                             }`
                         }
                     >
                         Home
                     </NavLink>
-                    
+
                     <NavLink
                         to="/favorites"
                         onClick={handleClose}
                         className={({ isActive }) =>
-                            `flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-all ${
-                                isActive 
-                                    ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20' 
+                            `flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-all duration-200 ${
+                                isActive
+                                    ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20'
                                     : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent'
                             }`
                         }
                     >
                         <span>Favorites</span>
                         {favoritesCount > 0 && (
-                            <span className="bg-sky-500/20 text-sky-400 py-0.5 px-2.5 rounded-full text-xs font-bold shadow-[0_0_10px_rgba(56,189,248,0.1)]">
+                            <span className="bg-sky-500/20 text-sky-400 py-0.5 px-2.5 rounded-full text-xs font-bold">
                                 {favoritesCount}
                             </span>
                         )}
@@ -182,16 +172,16 @@ export const MobileNav = ({ favoritesCount, watchlistCount }: MobileNavProps) =>
                         to="/watchlist"
                         onClick={handleClose}
                         className={({ isActive }) =>
-                            `flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-all ${
-                                isActive 
-                                    ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20' 
+                            `flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-all duration-200 ${
+                                isActive
+                                    ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20'
                                     : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent'
                             }`
                         }
                     >
                         <span>Watchlist</span>
                         {watchlistCount > 0 && (
-                            <span className="bg-sky-500/20 text-sky-400 py-0.5 px-2.5 rounded-full text-xs font-bold shadow-[0_0_10px_rgba(56,189,248,0.1)]">
+                            <span className="bg-sky-500/20 text-sky-400 py-0.5 px-2.5 rounded-full text-xs font-bold">
                                 {watchlistCount}
                             </span>
                         )}
@@ -200,13 +190,13 @@ export const MobileNav = ({ favoritesCount, watchlistCount }: MobileNavProps) =>
                     {isAuthenticated && (
                         <button
                             onClick={handleLogout}
-                            className="flex items-center w-full text-left px-4 py-3 mt-4 rounded-xl text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 border border-transparent transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                            className="flex items-center w-full text-left px-4 py-3 mt-2 rounded-xl text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 border border-transparent transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
                         >
                             Logout
                         </button>
                     )}
                 </nav>
             </div>
-        </div>
+        </>
     );
 };

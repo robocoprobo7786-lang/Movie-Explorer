@@ -54,12 +54,12 @@ export const MovieCard = ({ movie, isFavorite, isInWatchlist, onToggleFavorite, 
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
             </div>
-            <div className="p-3 sm:p-4 flex justify-between items-center gap-3">
-                <h3 className="m-0 text-base sm:text-lg font-semibold leading-tight whitespace-nowrap overflow-hidden text-ellipsis font-sans">
+            <div className="p-2 sm:p-3 md:p-4 flex justify-between items-center gap-2">
+                <h3 className="m-0 text-sm sm:text-base font-semibold leading-tight truncate font-sans">
                     {movie.title}
                 </h3>
-                <div className="flex items-center gap-1 text-[0.95rem] font-semibold text-yellow-400 bg-black/30 px-2 py-1 rounded-lg shrink-0">
-                    <span className="text-base">★</span> {movie.rating}
+                <div className="flex items-center gap-0.5 text-xs sm:text-sm font-semibold text-yellow-400 bg-black/30 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg shrink-0">
+                    <span>★</span> {movie.rating}
                 </div>
             </div>
         </div>
