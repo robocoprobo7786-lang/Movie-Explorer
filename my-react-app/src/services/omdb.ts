@@ -1,7 +1,6 @@
 import type { Movie } from '../types/movies';
 
-const BASE_URL = 'http://www.omdbapi.com/';
-
+const BASE_URL = "https://www.omdbapi.com/";
 // Helper to get the API key
 const getApiKey = (): string => {
   const apiKey = import.meta.env.VITE_OMDB_API_KEY;
@@ -68,8 +67,8 @@ const mapOMDbSearchResultToMovie = (omdbMovie: SearchMovieResult): Movie => {
     year: parseInt(omdbMovie.Year, 10) || 0,
     genre: [], // OMDb search results don't include genres
     rating: 0, // OMDb search results don't include ratings
-    poster: omdbMovie.Poster && omdbMovie.Poster !== 'N/A' 
-      ? omdbMovie.Poster 
+    poster: omdbMovie.Poster && omdbMovie.Poster !== 'N/A'
+      ? omdbMovie.Poster
       : 'https://via.placeholder.com/300x450?text=No+Poster',
     description: 'No description available.'
   };
@@ -83,17 +82,17 @@ const mapOMDbDetailsToMovie = (omdbMovie: MovieDetailsResponse): Movie => {
     id: omdbMovie.imdbID,
     title: omdbMovie.Title || 'Unknown Title',
     year: parseInt(omdbMovie.Year, 10) || 0,
-    genre: omdbMovie.Genre && omdbMovie.Genre !== 'N/A' 
-      ? omdbMovie.Genre.split(',').map(g => g.trim()) 
+    genre: omdbMovie.Genre && omdbMovie.Genre !== 'N/A'
+      ? omdbMovie.Genre.split(',').map(g => g.trim())
       : [],
-    rating: omdbMovie.imdbRating && omdbMovie.imdbRating !== 'N/A' 
-      ? parseFloat(omdbMovie.imdbRating) 
+    rating: omdbMovie.imdbRating && omdbMovie.imdbRating !== 'N/A'
+      ? parseFloat(omdbMovie.imdbRating)
       : 0,
-    poster: omdbMovie.Poster && omdbMovie.Poster !== 'N/A' 
-      ? omdbMovie.Poster 
+    poster: omdbMovie.Poster && omdbMovie.Poster !== 'N/A'
+      ? omdbMovie.Poster
       : 'https://via.placeholder.com/300x450?text=No+Poster',
-    description: omdbMovie.Plot && omdbMovie.Plot !== 'N/A' 
-      ? omdbMovie.Plot 
+    description: omdbMovie.Plot && omdbMovie.Plot !== 'N/A'
+      ? omdbMovie.Plot
       : 'No description available.'
   };
 };
@@ -109,14 +108,14 @@ export const searchMovies = async (query: string): Promise<Movie[]> => {
   try {
     const apiKey = getApiKey();
     const url = `${BASE_URL}?apikey=${apiKey}&s=${encodeURIComponent(query)}`;
-    
+
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data: SearchMoviesResponse = await response.json();
-    
+
     // OMDb returns a 200 OK even if the search fails, with Response: "False"
     if (data.Response === 'False') {
       // If it's just "Movie not found!", return an empty array instead of throwing
@@ -142,17 +141,17 @@ export const getMovieDetails = async (id: string | number): Promise<Movie> => {
   try {
     const apiKey = getApiKey();
     const imdbID = id.toString();
-    
+
     // Include 'plot=full' for a comprehensive plot description
     const url = `${BASE_URL}?apikey=${apiKey}&i=${encodeURIComponent(imdbID)}&plot=full`;
-    
+
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data: MovieDetailsResponse = await response.json();
-    
+
     // OMDb returns a 200 OK even if the request fails, with Response: "False"
     if (data.Response === 'False') {
       throw new Error(data.Error || 'Failed to get movie details');
