@@ -1,4 +1,5 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 interface HeaderProps {
     favoritesCount: number;
@@ -6,6 +7,14 @@ interface HeaderProps {
 }
 
 export const Header = ({ favoritesCount, watchlistCount }: HeaderProps) => {
+    const { isAuthenticated, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
+
     return (
         <header className="bg-slate-900 border-b border-white/10 sticky top-0 z-40 backdrop-blur-md bg-slate-900/80">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -15,7 +24,7 @@ export const Header = ({ favoritesCount, watchlistCount }: HeaderProps) => {
                             Movie Explorer
                         </NavLink>
                     </div>
-                    <nav className="flex space-x-4 sm:space-x-8">
+                    <nav className="flex items-center space-x-4 sm:space-x-8">
                         <NavLink 
                             to="/" 
                             className={({ isActive }) => 
@@ -50,6 +59,14 @@ export const Header = ({ favoritesCount, watchlistCount }: HeaderProps) => {
                                 </span>
                             )}
                         </NavLink>
+                        {isAuthenticated && (
+                            <button 
+                                onClick={handleLogout}
+                                className="text-sm font-medium transition-colors flex items-center gap-2 text-slate-300 hover:text-white cursor-pointer"
+                            >
+                                Logout
+                            </button>
+                        )}
                     </nav>
                 </div>
             </div>

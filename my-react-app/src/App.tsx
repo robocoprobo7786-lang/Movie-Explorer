@@ -3,9 +3,13 @@ import { Header } from "./components/Header";
 import HomePage from "./pages/HomePage";
 import FavoritesPage from "./pages/FavoritesPage";
 import WatchlistPage from "./pages/WatchlistPage";
+import LoginPage from "./pages/LoginPage";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
+    const { isAuthenticated } = useAuth();
     // We use Set under the hood, but useLocalStorage doesn't handle Set serialization automatically.
     // To keep things simple and beginner-friendly, we'll store arrays of IDs in localStorage,
     // and convert them to Sets for efficient lookup in our app.
@@ -38,40 +42,50 @@ function App() {
     return (
         <BrowserRouter>
             <div className="min-h-screen bg-slate-900 text-slate-50 font-sans antialiased">
-                <Header favoritesCount={favorites.size} watchlistCount={watchlist.size} />
+                {isAuthenticated && <Header favoritesCount={favorites.size} watchlistCount={watchlist.size} />}
                 <Routes>
                     <Route 
                         path="/" 
                         element={
-                            <HomePage 
-                                favorites={favorites} 
-                                watchlist={watchlist} 
-                                toggleFavorite={toggleFavorite} 
-                                toggleWatchlist={toggleWatchlist} 
-                            />
+                            <ProtectedRoute>
+                                <HomePage 
+                                    favorites={favorites} 
+                                    watchlist={watchlist} 
+                                    toggleFavorite={toggleFavorite} 
+                                    toggleWatchlist={toggleWatchlist} 
+                                />
+                            </ProtectedRoute>
                         } 
                     />
                     <Route 
                         path="/favorites" 
                         element={
-                            <FavoritesPage 
-                                favorites={favorites} 
-                                watchlist={watchlist} 
-                                toggleFavorite={toggleFavorite} 
-                                toggleWatchlist={toggleWatchlist} 
-                            />
+                            <ProtectedRoute>
+                                <FavoritesPage 
+                                    favorites={favorites} 
+                                    watchlist={watchlist} 
+                                    toggleFavorite={toggleFavorite} 
+                                    toggleWatchlist={toggleWatchlist} 
+                                />
+                            </ProtectedRoute>
                         } 
                     />
                     <Route 
                         path="/watchlist" 
                         element={
-                            <WatchlistPage 
-                                favorites={favorites} 
-                                watchlist={watchlist} 
-                                toggleFavorite={toggleFavorite} 
-                                toggleWatchlist={toggleWatchlist} 
-                            />
+                            <ProtectedRoute>
+                                <WatchlistPage 
+                                    favorites={favorites} 
+                                    watchlist={watchlist} 
+                                    toggleFavorite={toggleFavorite} 
+                                    toggleWatchlist={toggleWatchlist} 
+                                />
+                            </ProtectedRoute>
                         } 
+                    />
+                    <Route 
+                        path="/login" 
+                        element={<LoginPage />} 
                     />
                 </Routes>
             </div>

@@ -4,6 +4,7 @@ import { MovieCard } from "../components/MovieCard";
 import { SearchBar } from "../components/SearchBar";
 import { GenreFilter } from "../components/GenreFilter";
 import { MovieModal } from "../components/MovieModal";
+import useDebounce from "../hooks/useDebounce";
 import type { Movie } from "../types/movies";
 
 interface HomePageProps {
@@ -18,6 +19,8 @@ export default function HomePage({ favorites, watchlist, toggleFavorite, toggleW
     const [selectedGenre, setSelectedGenre] = useState("");
     const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
+    const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
     const genres = useMemo(() => {
         const allGenres = new Set<string>();
         moviesData.forEach(movie => {
@@ -27,7 +30,7 @@ export default function HomePage({ favorites, watchlist, toggleFavorite, toggleW
     }, []);
 
     const filteredMovies = moviesData.filter(movie => {
-        const matchesSearch = movie.title.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesSearch = movie.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
         const matchesGenre = selectedGenre === "" || movie.genre.includes(selectedGenre);
         return matchesSearch && matchesGenre;
     });
