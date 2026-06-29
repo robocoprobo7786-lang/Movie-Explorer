@@ -125,7 +125,7 @@ export const MobileNav = ({ favoritesCount, watchlistCount }: MobileNavProps) =>
             {/* Drawer Overlay (Backdrop) */}
             <div
                 onClick={handleClose}
-                className={`fixed inset-0 top-16 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 ${
+                className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-30 transition-opacity duration-300 ${
                     isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
                 }`}
                 aria-hidden="true"
@@ -134,7 +134,7 @@ export const MobileNav = ({ favoritesCount, watchlistCount }: MobileNavProps) =>
             {/* Vertical Navigation Drawer Container */}
             <div
                 ref={drawerRef}
-                className={`fixed top-16 right-0 h-[calc(100vh-4rem)] w-80 max-w-[85vw] bg-slate-900 border-l border-white/10 z-40 p-6 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out transform ${
+                className={`fixed top-0 right-0 h-full w-72 max-w-[85vw] bg-slate-900 border-l border-white/10 z-40 p-6 pt-24 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out transform ${
                     isOpen ? 'translate-x-0' : 'translate-x-full'
                 }`}
                 role="dialog"
@@ -143,7 +143,7 @@ export const MobileNav = ({ favoritesCount, watchlistCount }: MobileNavProps) =>
                 aria-hidden={!isOpen}
             >
                 {/* Navigation Links */}
-                <nav className="flex flex-col space-y-2">
+                <nav className="flex flex-col space-y-3">
                     <NavLink
                         ref={firstFocusableRef}
                         to="/"
@@ -200,7 +200,7 @@ export const MobileNav = ({ favoritesCount, watchlistCount }: MobileNavProps) =>
                     {isAuthenticated && (
                         <button
                             onClick={handleLogout}
-                            className="flex items-center w-full text-left px-4 py-3 rounded-xl text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 border border-transparent transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                            className="flex items-center w-full text-left px-4 py-3 mt-4 rounded-xl text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 border border-transparent transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
                         >
                             Logout
                         </button>
