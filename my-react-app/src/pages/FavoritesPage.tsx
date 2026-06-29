@@ -26,7 +26,7 @@ export default function FavoritesPage({ favorites, watchlist, toggleFavorite, to
                     <p className="text-2xl text-slate-400">Nothing to see here!</p>
                 </div>
             ) : (
-                <main className="grid grid-cols-1 min-[375px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
+                <main className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
                     {favoriteMovies.map(movie => (
                         <MovieCard
                             key={movie.id}

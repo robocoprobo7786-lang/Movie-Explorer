@@ -30,7 +30,7 @@ export const MovieModal = ({ movie, isOpen, onClose, isFavorite, isInWatchlist, 
                     <img
                         src={movie.poster}
                         alt={`${movie.title} poster`}
-                        className="w-full h-full object-cover max-h-[60vh] md:max-h-none aspect-[2/3]"
+                        className="w-full h-full object-cover max-h-[40vh] md:max-h-none aspect-[2/3]"
                     />
                 </div>
 
@@ -49,7 +49,7 @@ export const MovieModal = ({ movie, isOpen, onClose, isFavorite, isInWatchlist, 
                         </span>
                     </div>
 
-                    <p className="text-lg leading-relaxed text-slate-300">
+                    <p className="text-base sm:text-lg leading-relaxed text-slate-300">
                         {movie.description}
                     </p>
 

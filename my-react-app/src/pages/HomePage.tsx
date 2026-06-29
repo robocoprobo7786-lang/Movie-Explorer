@@ -84,7 +84,7 @@ export default function HomePage({ favorites, watchlist, toggleFavorite, toggleW
                 </div>
             </header>
             
-            <main className="grid grid-cols-1 min-[375px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
+            <main className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
                 {isLoading ? (
                     <div className="col-span-full flex justify-center items-center py-20">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-400"></div>

@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { MobileNav } from './MobileNav';
 
 interface HeaderProps {
     favoritesCount: number;
@@ -24,7 +25,7 @@ export const Header = ({ favoritesCount, watchlistCount }: HeaderProps) => {
                             Movie Explorer
                         </NavLink>
                     </div>
-                    <nav className="flex items-center space-x-4 sm:space-x-8">
+                    <nav className="hidden md:flex items-center space-x-4 sm:space-x-8">
                         <NavLink 
                             to="/" 
                             className={({ isActive }) => 
@@ -68,6 +69,9 @@ export const Header = ({ favoritesCount, watchlistCount }: HeaderProps) => {
                             </button>
                         )}
                     </nav>
+                    <div className="md:hidden flex items-center">
+                        <MobileNav favoritesCount={favoritesCount} watchlistCount={watchlistCount} />
+                    </div>
                 </div>
             </div>
         </header>
