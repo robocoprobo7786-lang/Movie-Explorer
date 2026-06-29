@@ -5,10 +5,10 @@ import { MovieModal } from "../components/MovieModal";
 import type { Movie } from "../types/movies";
 
 interface FavoritesPageProps {
-    favorites: Set<number>;
-    watchlist: Set<number>;
-    toggleFavorite: (id: number) => void;
-    toggleWatchlist: (id: number) => void;
+    favorites: Set<string | number>;
+    watchlist: Set<string | number>;
+    toggleFavorite: (id: string | number) => void;
+    toggleWatchlist: (id: string | number) => void;
 }
 
 export default function FavoritesPage({ favorites, watchlist, toggleFavorite, toggleWatchlist }: FavoritesPageProps) {

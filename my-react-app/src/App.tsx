@@ -13,13 +13,13 @@ function App() {
     // We use Set under the hood, but useLocalStorage doesn't handle Set serialization automatically.
     // To keep things simple and beginner-friendly, we'll store arrays of IDs in localStorage,
     // and convert them to Sets for efficient lookup in our app.
-    const [storedFavorites, setStoredFavorites] = useLocalStorage<number[]>("movie_favorites", []);
-    const [storedWatchlist, setStoredWatchlist] = useLocalStorage<number[]>("movie_watchlist", []);
+    const [storedFavorites, setStoredFavorites] = useLocalStorage<(string | number)[]>("movie_favorites", []);
+    const [storedWatchlist, setStoredWatchlist] = useLocalStorage<(string | number)[]>("movie_watchlist", []);
 
-    const favorites = new Set(storedFavorites);
-    const watchlist = new Set(storedWatchlist);
+    const favorites = new Set<string | number>(storedFavorites);
+    const watchlist = new Set<string | number>(storedWatchlist);
 
-    const toggleFavorite = (movieId: number) => {
+    const toggleFavorite = (movieId: string | number) => {
         const next = new Set(favorites);
         if (next.has(movieId)) {
             next.delete(movieId);
@@ -29,7 +29,7 @@ function App() {
         setStoredFavorites(Array.from(next));
     };
 
-    const toggleWatchlist = (movieId: number) => {
+    const toggleWatchlist = (movieId: string | number) => {
         const next = new Set(watchlist);
         if (next.has(movieId)) {
             next.delete(movieId);

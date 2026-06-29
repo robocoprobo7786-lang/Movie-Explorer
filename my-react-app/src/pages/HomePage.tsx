@@ -1,17 +1,18 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import moviesData from "../data/movies.json";
 import { MovieCard } from "../components/MovieCard";
 import { SearchBar } from "../components/SearchBar";
 import { GenreFilter } from "../components/GenreFilter";
 import { MovieModal } from "../components/MovieModal";
 import useDebounce from "../hooks/useDebounce";
+import { searchMovies } from "../services/omdb";
 import type { Movie } from "../types/movies";
 
 interface HomePageProps {
-    favorites: Set<number>;
-    watchlist: Set<number>;
-    toggleFavorite: (id: number) => void;
-    toggleWatchlist: (id: number) => void;
+    favorites: Set<string | number>;
+    watchlist: Set<string | number>;
+    toggleFavorite: (id: string | number) => void;
+    toggleWatchlist: (id: string | number) => void;
 }
 
 export default function HomePage({ favorites, watchlist, toggleFavorite, toggleWatchlist }: HomePageProps) {
@@ -19,8 +20,39 @@ export default function HomePage({ favorites, watchlist, toggleFavorite, toggleW
     const [selectedGenre, setSelectedGenre] = useState("");
     const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
+    const [omdbMovies, setOmdbMovies] = useState<Movie[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
+    // Fetch movies from OMDb when search term changes
+    useEffect(() => {
+        if (!debouncedSearchTerm.trim()) {
+            setOmdbMovies([]);
+            setError(null);
+            setIsLoading(false);
+            return;
+        }
+
+        const fetchMovies = async () => {
+            setIsLoading(true);
+            setError(null);
+            try {
+                const results = await searchMovies(debouncedSearchTerm);
+                setOmdbMovies(results);
+            } catch (err: any) {
+                setError(err.message || "An error occurred while fetching movies.");
+                setOmdbMovies([]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchMovies();
+    }, [debouncedSearchTerm]);
+
+    // Compute genres from local data (OMDb search results don't include genres)
     const genres = useMemo(() => {
         const allGenres = new Set<string>();
         moviesData.forEach(movie => {
@@ -29,11 +61,15 @@ export default function HomePage({ favorites, watchlist, toggleFavorite, toggleW
         return Array.from(allGenres).sort();
     }, []);
 
-    const filteredMovies = moviesData.filter(movie => {
-        const matchesSearch = movie.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
-        const matchesGenre = selectedGenre === "" || movie.genre.includes(selectedGenre);
-        return matchesSearch && matchesGenre;
-    });
+    // Compute the final list of movies to display
+    const displayedMovies = useMemo(() => {
+        const baseMovies = debouncedSearchTerm.trim() ? omdbMovies : moviesData;
+        
+        return baseMovies.filter(movie => {
+            const matchesGenre = selectedGenre === "" || movie.genre.includes(selectedGenre);
+            return matchesGenre;
+        });
+    }, [debouncedSearchTerm, omdbMovies, selectedGenre]);
 
     return (
         <div className="p-4 sm:p-8 md:p-16">
@@ -47,19 +83,35 @@ export default function HomePage({ favorites, watchlist, toggleFavorite, toggleW
                     </div>
                 </div>
             </header>
+            
             <main className="grid grid-cols-1 min-[375px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
-                {filteredMovies.map(movie => (
-                    <MovieCard
-                        key={movie.id}
-                        movie={movie}
-                        isFavorite={favorites.has(movie.id)}
-                        isInWatchlist={watchlist.has(movie.id)}
-                        onToggleFavorite={() => toggleFavorite(movie.id)}
-                        onToggleWatchlist={() => toggleWatchlist(movie.id)}
-                        onClick={() => setSelectedMovie(movie)}
-                    />
-                ))}
+                {isLoading ? (
+                    <div className="col-span-full flex justify-center items-center py-20">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-400"></div>
+                    </div>
+                ) : error ? (
+                    <div className="col-span-full text-center text-lg text-red-400 py-12 bg-red-500/10 rounded-2xl border border-red-500/20 backdrop-blur-md">
+                        {error}
+                    </div>
+                ) : displayedMovies.length === 0 ? (
+                    <div className="col-span-full text-center text-lg text-slate-300 py-12 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-md">
+                        No movies found.
+                    </div>
+                ) : (
+                    displayedMovies.map(movie => (
+                        <MovieCard
+                            key={movie.id}
+                            movie={movie}
+                            isFavorite={favorites.has(movie.id)}
+                            isInWatchlist={watchlist.has(movie.id)}
+                            onToggleFavorite={() => toggleFavorite(movie.id)}
+                            onToggleWatchlist={() => toggleWatchlist(movie.id)}
+                            onClick={() => setSelectedMovie(movie)}
+                        />
+                    ))
+                )}
             </main>
+
             <MovieModal
                 isOpen={!!selectedMovie}
                 movie={selectedMovie}
