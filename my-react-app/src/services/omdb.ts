@@ -1,7 +1,6 @@
 import type { Movie } from '../types/movies';
 
-const BASE_URL = "https://www.omdbapi.com/";
-// Helper to get the API key
+const BASE_URL = "https://www.omdbapi.com";
 const getApiKey = (): string => {
   const apiKey = import.meta.env.VITE_OMDB_API_KEY;
   if (!apiKey) {
