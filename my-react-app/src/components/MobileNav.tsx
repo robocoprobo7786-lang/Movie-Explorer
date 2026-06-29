@@ -95,16 +95,16 @@ export const MobileNav = ({ favoritesCount, watchlistCount }: MobileNavProps) =>
                 </div>
             </button>
 
-            {/* Backdrop — sits below drawer, above page content */}
+            {/* Backdrop — no backdrop-blur to avoid GPU compositing jitter during slide */}
             <div
                 onClick={handleClose}
                 aria-hidden="true"
-                className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 ${
+                className={`fixed inset-0 bg-black/60 z-40 transition-opacity duration-300 ${
                     isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
                 }`}
             />
 
-            {/* Drawer — full height, slides in from right, sits above backdrop */}
+            {/* Drawer — will-change pre-promotes to GPU layer, ease-out feels natural for slide-in */}
             <div
                 id="mobile-drawer"
                 ref={drawerRef}
@@ -112,7 +112,7 @@ export const MobileNav = ({ favoritesCount, watchlistCount }: MobileNavProps) =>
                 aria-modal="true"
                 aria-label="Navigation menu"
                 aria-hidden={!isOpen}
-                className={`fixed top-0 right-0 h-screen w-72 max-w-[85vw] bg-slate-900 border-l border-white/10 z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${
+                className={`fixed top-0 right-0 h-screen w-72 max-w-[85vw] bg-slate-900 border-l border-white/10 z-50 flex flex-col shadow-2xl will-change-transform transition-transform duration-300 ease-out ${
                     isOpen ? 'translate-x-0' : 'translate-x-full'
                 }`}
             >
