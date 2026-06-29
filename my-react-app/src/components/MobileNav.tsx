@@ -14,7 +14,7 @@ export const MobileNav = ({ favoritesCount, watchlistCount }: MobileNavProps) =>
     
     const drawerRef = useRef<HTMLDivElement>(null);
     const hamburgerRef = useRef<HTMLButtonElement>(null);
-    const firstFocusableRef = useRef<HTMLButtonElement>(null);
+    const firstFocusableRef = useRef<HTMLAnchorElement>(null);
     const previousFocusRef = useRef<HTMLElement | null>(null);
 
     const toggleOpen = () => setIsOpen(prev => !prev);
@@ -36,6 +36,17 @@ export const MobileNav = ({ favoritesCount, watchlistCount }: MobileNavProps) =>
         return () => {
             document.body.style.overflow = '';
         };
+    }, [isOpen]);
+
+    // Prevent scroll lock bug if window is resized to desktop width
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 768 && isOpen) {
+                setIsOpen(false);
+            }
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, [isOpen]);
 
     // Accessibility: ESC listener, focus traps, focus restore
@@ -114,7 +125,7 @@ export const MobileNav = ({ favoritesCount, watchlistCount }: MobileNavProps) =>
             {/* Drawer Overlay (Backdrop) */}
             <div
                 onClick={handleClose}
-                className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 ${
+                className={`fixed inset-0 top-16 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 ${
                     isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
                 }`}
                 aria-hidden="true"
@@ -123,7 +134,7 @@ export const MobileNav = ({ favoritesCount, watchlistCount }: MobileNavProps) =>
             {/* Vertical Navigation Drawer Container */}
             <div
                 ref={drawerRef}
-                className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-slate-900 border-l border-white/10 z-40 p-6 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out transform ${
+                className={`fixed top-16 right-0 h-[calc(100vh-4rem)] w-80 max-w-[85vw] bg-slate-900 border-l border-white/10 z-40 p-6 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out transform ${
                     isOpen ? 'translate-x-0' : 'translate-x-full'
                 }`}
                 role="dialog"
@@ -131,24 +142,10 @@ export const MobileNav = ({ favoritesCount, watchlistCount }: MobileNavProps) =>
                 aria-label="Navigation drawer"
                 aria-hidden={!isOpen}
             >
-                {/* Drawer Header */}
-                <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
-                    <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">
-                        Menu
-                    </span>
-                    <button
-                        ref={firstFocusableRef}
-                        onClick={handleClose}
-                        className="w-10 h-10 bg-white/5 hover:bg-white/10 text-white rounded-full flex items-center justify-center transition-colors border border-white/10 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
-                        aria-label="Close menu"
-                    >
-                        ✕
-                    </button>
-                </div>
-
                 {/* Navigation Links */}
                 <nav className="flex flex-col space-y-2">
                     <NavLink
+                        ref={firstFocusableRef}
                         to="/"
                         onClick={handleClose}
                         className={({ isActive }) =>
